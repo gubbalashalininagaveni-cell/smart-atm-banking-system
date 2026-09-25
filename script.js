@@ -23,10 +23,12 @@ function login() {
 
 
 // ================================
-// BANK BALANCE
+// BANK DETAILS
 // ================================
 
 let balance = 25000;
+
+let accountNumber = "1234567890";
 
 
 // ================================
@@ -137,6 +139,8 @@ function depositMoney() {
     }
 
 
+    let previousBalance = balance;
+
     balance = balance + amount;
 
     updateBalance();
@@ -154,6 +158,15 @@ function depositMoney() {
         " deposited successfully.";
 
     document.getElementById("depositAmount").value = "";
+
+
+    // Generate receipt
+    generateReceipt(
+        "Deposit",
+        amount,
+        previousBalance,
+        balance
+    );
 }
 
 
@@ -202,6 +215,8 @@ function withdrawMoney() {
     }
 
 
+    let previousBalance = balance;
+
     balance = balance - amount;
 
     updateBalance();
@@ -219,6 +234,15 @@ function withdrawMoney() {
         " withdrawn successfully.";
 
     document.getElementById("withdrawAmount").value = "";
+
+
+    // Generate receipt
+    generateReceipt(
+        "Withdrawal",
+        amount,
+        previousBalance,
+        balance
+    );
 }
 
 
@@ -242,7 +266,7 @@ function showTransfer() {
 
 function transferMoney() {
 
-    let account =
+    let recipient =
         document.getElementById("recipientAccount").value;
 
     let amount =
@@ -252,7 +276,7 @@ function transferMoney() {
         document.getElementById("transferMessage");
 
 
-    if (account === "") {
+    if (recipient === "") {
 
         message.innerText =
             "Please enter recipient account number.";
@@ -279,6 +303,8 @@ function transferMoney() {
     }
 
 
+    let previousBalance = balance;
+
     balance = balance - amount;
 
     updateBalance();
@@ -288,7 +314,7 @@ function transferMoney() {
         "Transferred ₹" +
         amount.toLocaleString("en-IN") +
         " to account " +
-        account
+        recipient
     );
 
 
@@ -300,6 +326,16 @@ function transferMoney() {
     document.getElementById("recipientAccount").value = "";
 
     document.getElementById("transferAmount").value = "";
+
+
+    // Generate receipt
+    generateReceipt(
+        "Transfer",
+        amount,
+        previousBalance,
+        balance,
+        recipient
+    );
 }
 
 
@@ -330,4 +366,190 @@ function addTransaction(text) {
     item.innerText = text;
 
     transactions.appendChild(item);
+}
+
+
+// ================================
+// GENERATE RECEIPT
+// ================================
+
+function generateReceipt(
+    type,
+    amount,
+    previousBalance,
+    newBalance,
+    recipient = ""
+) {
+
+    let receiptSection =
+        document.getElementById("receiptSection");
+
+    let receiptContent =
+        document.getElementById("receiptContent");
+
+
+    let now = new Date();
+
+    let date =
+        now.toLocaleDateString("en-IN");
+
+    let time =
+        now.toLocaleTimeString("en-IN");
+
+
+    let receiptHTML = `
+
+        <div class="receipt">
+
+            <h2>🏦 Smart ATM & Banking</h2>
+
+            <p class="receipt-title">
+                TRANSACTION RECEIPT
+            </p>
+
+            <hr>
+
+            <p>
+                <strong>Transaction:</strong>
+                ${type}
+            </p>
+
+            <p>
+                <strong>Account Number:</strong>
+                ${accountNumber}
+            </p>
+
+            ${
+                recipient !== ""
+                ?
+                `<p>
+                    <strong>Recipient:</strong>
+                    ${recipient}
+                </p>`
+                :
+                ""
+            }
+
+            <p>
+                <strong>Amount:</strong>
+                ₹${amount.toLocaleString("en-IN")}
+            </p>
+
+            <p>
+                <strong>Previous Balance:</strong>
+                ₹${previousBalance.toLocaleString("en-IN")}
+            </p>
+
+            <p>
+                <strong>New Balance:</strong>
+                ₹${newBalance.toLocaleString("en-IN")}
+            </p>
+
+            <p>
+                <strong>Date:</strong>
+                ${date}
+            </p>
+
+            <p>
+                <strong>Time:</strong>
+                ${time}
+            </p>
+
+            <hr>
+
+            <h3>Transaction Successful</h3>
+
+            <p class="demo-note">
+                This is a demo transaction for a
+                college project.
+            </p>
+
+        </div>
+    `;
+
+
+    receiptContent.innerHTML = receiptHTML;
+
+    receiptSection.style.display = "block";
+}
+
+
+// ================================
+// PRINT / SAVE RECEIPT
+// ================================
+
+function printReceipt() {
+
+    let receipt =
+        document.getElementById("receiptContent").innerHTML;
+
+
+    let printWindow =
+        window.open("", "", "width=700,height=800");
+
+
+    printWindow.document.write(`
+
+        <html>
+
+        <head>
+
+            <title>Smart ATM Receipt</title>
+
+            <style>
+
+                body {
+                    font-family: Arial, sans-serif;
+                    padding: 40px;
+                    color: #14213d;
+                }
+
+                .receipt {
+                    max-width: 500px;
+                    margin: auto;
+                    padding: 30px;
+                    border: 1px solid #ddd;
+                }
+
+                h2 {
+                    text-align: center;
+                }
+
+                .receipt-title {
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                hr {
+                    border: none;
+                    border-top: 1px solid #ddd;
+                    margin: 20px 0;
+                }
+
+                .demo-note {
+                    text-align: center;
+                    font-size: 12px;
+                    color: #777;
+                    margin-top: 25px;
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            ${receipt}
+
+        </body>
+
+        </html>
+    `);
+
+
+    printWindow.document.close();
+
+    printWindow.focus();
+
+    printWindow.print();
 }
