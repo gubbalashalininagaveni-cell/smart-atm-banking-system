@@ -1,31 +1,32 @@
-// ================================================
+// ==================================================
 // SMART ATM & BANKING SYSTEM
-// Complete JavaScript
-// ================================================
+// COMPLETE SCRIPT.JS
+// ==================================================
 
-// ================================================
-// PERMANENT DEMO ACCOUNT
-// ================================================
+
+// ==================================================
+// FIXED DEMO ACCOUNT
+// ==================================================
 
 const DEMO_ACCOUNT = "10000000000001";
 const DEMO_PIN = "1234";
 const DEMO_NAME = "Demo User";
 
-
-// ================================================
-// CURRENT ACCOUNT
-// ================================================
-
-let accountNumber =
-    localStorage.getItem("accountNumber") || "";
-
-let balance =
-    Number(localStorage.getItem("accountBalance")) || 0;
+// Fixed starting balance
+const FIXED_BALANCE = 25000;
 
 
-// ================================================
+// ==================================================
+// CURRENT ACCOUNT VARIABLES
+// ==================================================
+
+let accountNumber = "";
+let balance = FIXED_BALANCE;
+
+
+// ==================================================
 // LOGIN
-// ================================================
+// ==================================================
 
 function login() {
 
@@ -39,7 +40,20 @@ function login() {
         document.getElementById("message");
 
 
-    // Check permanent demo account
+    // Check account number
+    if (!/^[0-9]{14}$/.test(enteredAccount)) {
+
+        message.innerText =
+            "Account number must contain exactly 14 digits.";
+
+        return;
+    }
+
+
+    // ==================================================
+    // PERMANENT DEMO ACCOUNT
+    // ==================================================
+
     if (
         enteredAccount === DEMO_ACCOUNT &&
         enteredPin === DEMO_PIN
@@ -55,18 +69,17 @@ function login() {
             DEMO_NAME
         );
 
-        localStorage.setItem(
-            "loggedInBalance",
-            "25000"
-        );
-
-        window.location.href = "dashboard.html";
+        window.location.href =
+            "dashboard.html";
 
         return;
     }
 
 
-    // Check created account
+    // ==================================================
+    // USER CREATED ACCOUNT
+    // ==================================================
+
     let savedAccount =
         localStorage.getItem("accountNumber");
 
@@ -75,8 +88,6 @@ function login() {
 
 
     if (
-        savedAccount &&
-        savedPin &&
         enteredAccount === savedAccount &&
         enteredPin === savedPin
     ) {
@@ -88,109 +99,113 @@ function login() {
 
         localStorage.setItem(
             "loggedInName",
-            localStorage.getItem("accountName") || "Account Holder"
+            localStorage.getItem("accountName") ||
+            "Account Holder"
         );
 
-        localStorage.setItem(
-            "loggedInBalance",
-            localStorage.getItem("accountBalance") || "0"
-        );
-
-        window.location.href = "dashboard.html";
+        window.location.href =
+            "dashboard.html";
 
         return;
     }
 
 
-    // Invalid login
+    // ==================================================
+    // INVALID LOGIN
+    // ==================================================
+
     message.innerText =
         "Invalid account number or PIN.";
 }
 
 
-// ================================================
-// LOAD CURRENT LOGGED-IN ACCOUNT
-// ================================================
+// ==================================================
+// LOGOUT
+// ==================================================
 
-function loadAccount() {
+function logout() {
 
-    let loggedInAccount =
-        localStorage.getItem("loggedInAccount");
-
-    let loggedInBalance =
-        localStorage.getItem("loggedInBalance");
-
-
-    if (loggedInAccount) {
-
-        accountNumber = loggedInAccount;
-    }
-
-
-    if (loggedInBalance !== null) {
-
-        balance =
-            Number(loggedInBalance);
-    }
-
-
-    // Demo account
-    if (accountNumber === DEMO_ACCOUNT) {
-
-        balance = Number(
-            localStorage.getItem("demoBalance") || "25000"
-        );
-    }
-}
-
-
-// ================================================
-// SAVE CURRENT BALANCE
-// ================================================
-
-function saveBalance() {
-
-    localStorage.setItem(
-        "loggedInBalance",
-        balance
+    localStorage.removeItem(
+        "loggedInAccount"
     );
 
-
-    if (accountNumber === DEMO_ACCOUNT) {
-
-        localStorage.setItem(
-            "demoBalance",
-            balance
-        );
-
-    } else {
-
-        localStorage.setItem(
-            "accountBalance",
-            balance
-        );
-    }
+    localStorage.removeItem(
+        "loggedInName"
+    );
 }
 
 
-// ================================================
-// UPDATE BALANCE DISPLAY
-// ================================================
+// ==================================================
+// LOAD ACCOUNT WHEN DASHBOARD OPENS
+// ==================================================
+
+function loadDashboardAccount() {
+
+    let loggedInAccount =
+        localStorage.getItem(
+            "loggedInAccount"
+        );
+
+
+    // If not logged in
+    if (!loggedInAccount) {
+
+        window.location.href =
+            "login.html";
+
+        return false;
+    }
+
+
+    accountNumber =
+        loggedInAccount;
+
+
+    // ==================================================
+    // IMPORTANT:
+    // EVERY NEW DASHBOARD OPEN STARTS AT ₹25,000
+    // ==================================================
+
+    balance =
+        FIXED_BALANCE;
+
+
+    return true;
+}
+
+
+// ==================================================
+// FORMAT MONEY
+// ==================================================
+
+function formatMoney(amount) {
+
+    return "₹" +
+        Number(amount).toLocaleString("en-IN");
+}
+
+
+// ==================================================
+// UPDATE BALANCE EVERYWHERE
+// ==================================================
 
 function updateBalance() {
 
-    let balanceText =
-        "₹" + balance.toLocaleString("en-IN");
+    let formattedBalance =
+        formatMoney(balance);
 
 
     let mainBalance =
         document.getElementById("balance");
 
+
     let depositBalance =
         document.getElementById("depositBalance");
 
+
     let withdrawBalance =
         document.getElementById("withdrawBalance");
+
 
     let transferBalance =
         document.getElementById("transferBalance");
@@ -199,132 +214,358 @@ function updateBalance() {
     if (mainBalance) {
 
         mainBalance.innerText =
-            balanceText;
+            formattedBalance;
     }
 
 
     if (depositBalance) {
 
         depositBalance.innerText =
-            balanceText;
+            formattedBalance;
     }
 
 
     if (withdrawBalance) {
 
         withdrawBalance.innerText =
-            balanceText;
+            formattedBalance;
     }
 
 
     if (transferBalance) {
 
         transferBalance.innerText =
-            balanceText;
+            formattedBalance;
     }
 }
 
 
-// ================================================
+// ==================================================
+// RESET TRANSACTION HISTORY
+// ==================================================
+
+function resetTransactionHistory() {
+
+    let transactionList =
+        document.getElementById(
+            "transactions"
+        );
+
+
+    if (!transactionList) {
+
+        return;
+    }
+
+
+    transactionList.innerHTML = "";
+
+
+    let firstTransaction =
+        document.createElement("li");
+
+
+    firstTransaction.innerHTML = `
+
+        <strong>
+            Account created — ${formatMoney(FIXED_BALANCE)}
+        </strong>
+
+        <br>
+
+        <small>
+            Starting Balance
+        </small>
+
+    `;
+
+
+    transactionList.appendChild(
+        firstTransaction
+    );
+}
+
+
+// ==================================================
+// ADD TRANSACTION
+// ==================================================
+
+function addTransaction(
+    type,
+    amount,
+    extraText = ""
+) {
+
+    let transactionList =
+        document.getElementById(
+            "transactions"
+        );
+
+
+    if (!transactionList) {
+
+        return;
+    }
+
+
+    let item =
+        document.createElement("li");
+
+
+    let text = "";
+
+
+    // Deposit
+    if (type === "Deposit") {
+
+        text =
+            "Deposited + " +
+            formatMoney(amount);
+    }
+
+
+    // Withdrawal
+    else if (type === "Withdrawal") {
+
+        text =
+            "Withdrawn - " +
+            formatMoney(amount);
+    }
+
+
+    // Transfer
+    else if (type === "Transfer") {
+
+        text =
+            "Transferred - " +
+            formatMoney(amount);
+
+
+        if (extraText !== "") {
+
+            text +=
+                " to account " +
+                extraText;
+        }
+    }
+
+
+    item.innerHTML = `
+
+        <strong>
+            ${text}
+        </strong>
+
+        <br>
+
+        <small>
+            ${new Date().toLocaleDateString("en-IN")}
+            -
+            ${new Date().toLocaleTimeString("en-IN")}
+        </small>
+
+    `;
+
+
+    // Newest transaction at the top
+    transactionList.insertBefore(
+        item,
+        transactionList.firstChild
+    );
+}
+
+
+// ==================================================
 // HIDE ALL SCREENS
-// ================================================
+// ==================================================
 
 function hideAllScreens() {
 
-    let home =
-        document.getElementById("homeScreen");
+    let screens = [
 
-    let deposit =
-        document.getElementById("depositScreen");
+        "homeScreen",
+        "depositScreen",
+        "withdrawScreen",
+        "transferScreen",
+        "transactionScreen"
 
-    let withdraw =
-        document.getElementById("withdrawScreen");
-
-    let transfer =
-        document.getElementById("transferScreen");
-
-    let transactions =
-        document.getElementById("transactionScreen");
+    ];
 
 
-    if (home) {
-        home.style.display = "none";
-    }
+    screens.forEach(
+        function(screenID) {
 
-    if (deposit) {
-        deposit.style.display = "none";
-    }
+            let screen =
+                document.getElementById(
+                    screenID
+                );
 
-    if (withdraw) {
-        withdraw.style.display = "none";
-    }
 
-    if (transfer) {
-        transfer.style.display = "none";
-    }
+            if (screen) {
 
-    if (transactions) {
-        transactions.style.display = "none";
-    }
+                screen.style.display =
+                    "none";
+            }
+
+        }
+    );
 }
 
 
-// ================================================
-// HOME
-// ================================================
+// ==================================================
+// SHOW HOME
+// ==================================================
 
 function showHome() {
 
     hideAllScreens();
 
-    let home =
-        document.getElementById("homeScreen");
 
-    if (home) {
+    let screen =
+        document.getElementById(
+            "homeScreen"
+        );
 
-        home.style.display = "block";
+
+    if (screen) {
+
+        screen.style.display =
+            "block";
     }
+
 
     updateBalance();
 }
 
 
-// ================================================
-// DEPOSIT SCREEN
-// ================================================
+// ==================================================
+// SHOW DEPOSIT
+// ==================================================
 
 function showDeposit() {
 
     hideAllScreens();
 
+
     let screen =
-        document.getElementById("depositScreen");
+        document.getElementById(
+            "depositScreen"
+        );
+
 
     if (screen) {
 
-        screen.style.display = "block";
+        screen.style.display =
+            "block";
     }
+
 
     updateBalance();
 }
 
 
-// ================================================
+// ==================================================
+// SHOW WITHDRAW
+// ==================================================
+
+function showWithdraw() {
+
+    hideAllScreens();
+
+
+    let screen =
+        document.getElementById(
+            "withdrawScreen"
+        );
+
+
+    if (screen) {
+
+        screen.style.display =
+            "block";
+    }
+
+
+    updateBalance();
+}
+
+
+// ==================================================
+// SHOW TRANSFER
+// ==================================================
+
+function showTransfer() {
+
+    hideAllScreens();
+
+
+    let screen =
+        document.getElementById(
+            "transferScreen"
+        );
+
+
+    if (screen) {
+
+        screen.style.display =
+            "block";
+    }
+
+
+    updateBalance();
+}
+
+
+// ==================================================
+// SHOW TRANSACTIONS
+// ==================================================
+
+function showTransactions() {
+
+    hideAllScreens();
+
+
+    let screen =
+        document.getElementById(
+            "transactionScreen"
+        );
+
+
+    if (screen) {
+
+        screen.style.display =
+            "block";
+    }
+
+
+    updateBalance();
+}
+
+
+// ==================================================
 // DEPOSIT MONEY
-// ================================================
+// ==================================================
 
 function depositMoney() {
 
     let amount =
         Number(
-            document.getElementById("depositAmount").value
+            document.getElementById(
+                "depositAmount"
+            ).value
         );
 
+
     let message =
-        document.getElementById("depositMessage");
+        document.getElementById(
+            "depositMessage"
+        );
 
 
-    if (amount <= 0 || isNaN(amount)) {
+    if (
+        amount <= 0 ||
+        isNaN(amount)
+    ) {
 
         message.innerText =
             "Please enter a valid amount.";
@@ -337,32 +578,34 @@ function depositMoney() {
         balance;
 
 
+    // Add money
     balance =
         balance + amount;
 
 
-    saveBalance();
-
+    // Update dashboard
     updateBalance();
 
 
+    // Add transaction
     addTransaction(
-        "Deposited ₹" +
-        amount.toLocaleString("en-IN")
+        "Deposit",
+        amount
     );
 
 
     message.innerText =
-        "₹" +
-        amount.toLocaleString("en-IN") +
+        formatMoney(amount) +
         " deposited successfully.";
 
 
+    // Clear input
     document.getElementById(
         "depositAmount"
     ).value = "";
 
 
+    // Generate receipt
     generateReceipt(
         "Deposit",
         amount,
@@ -372,42 +615,30 @@ function depositMoney() {
 }
 
 
-// ================================================
-// WITHDRAW SCREEN
-// ================================================
-
-function showWithdraw() {
-
-    hideAllScreens();
-
-    let screen =
-        document.getElementById("withdrawScreen");
-
-    if (screen) {
-
-        screen.style.display = "block";
-    }
-
-    updateBalance();
-}
-
-
-// ================================================
+// ==================================================
 // WITHDRAW MONEY
-// ================================================
+// ==================================================
 
 function withdrawMoney() {
 
     let amount =
         Number(
-            document.getElementById("withdrawAmount").value
+            document.getElementById(
+                "withdrawAmount"
+            ).value
         );
 
+
     let message =
-        document.getElementById("withdrawMessage");
+        document.getElementById(
+            "withdrawMessage"
+        );
 
 
-    if (amount <= 0 || isNaN(amount)) {
+    if (
+        amount <= 0 ||
+        isNaN(amount)
+    ) {
 
         message.innerText =
             "Please enter a valid amount.";
@@ -429,32 +660,34 @@ function withdrawMoney() {
         balance;
 
 
+    // Subtract money
     balance =
         balance - amount;
 
 
-    saveBalance();
-
+    // Update dashboard
     updateBalance();
 
 
+    // Add transaction
     addTransaction(
-        "Withdrawn ₹" +
-        amount.toLocaleString("en-IN")
+        "Withdrawal",
+        amount
     );
 
 
     message.innerText =
-        "₹" +
-        amount.toLocaleString("en-IN") +
+        formatMoney(amount) +
         " withdrawn successfully.";
 
 
+    // Clear input
     document.getElementById(
         "withdrawAmount"
     ).value = "";
 
 
+    // Generate receipt
     generateReceipt(
         "Withdrawal",
         amount,
@@ -464,29 +697,9 @@ function withdrawMoney() {
 }
 
 
-// ================================================
-// TRANSFER SCREEN
-// ================================================
-
-function showTransfer() {
-
-    hideAllScreens();
-
-    let screen =
-        document.getElementById("transferScreen");
-
-    if (screen) {
-
-        screen.style.display = "block";
-    }
-
-    updateBalance();
-}
-
-
-// ================================================
+// ==================================================
 // TRANSFER MONEY
-// ================================================
+// ==================================================
 
 function transferMoney() {
 
@@ -510,7 +723,12 @@ function transferMoney() {
         );
 
 
-    if (!/^[0-9]{14}$/.test(recipient)) {
+    // Check recipient account
+    if (
+        !/^[0-9]{14}$/.test(
+            recipient
+        )
+    ) {
 
         message.innerText =
             "Recipient account number must contain exactly 14 digits.";
@@ -519,7 +737,10 @@ function transferMoney() {
     }
 
 
-    if (recipient === accountNumber) {
+    // Cannot transfer to own account
+    if (
+        recipient === accountNumber
+    ) {
 
         message.innerText =
             "You cannot transfer money to your own account.";
@@ -528,7 +749,11 @@ function transferMoney() {
     }
 
 
-    if (amount <= 0 || isNaN(amount)) {
+    // Check amount
+    if (
+        amount <= 0 ||
+        isNaN(amount)
+    ) {
 
         message.innerText =
             "Please enter a valid amount.";
@@ -537,6 +762,7 @@ function transferMoney() {
     }
 
 
+    // Check balance
     if (amount > balance) {
 
         message.innerText =
@@ -550,29 +776,29 @@ function transferMoney() {
         balance;
 
 
+    // Subtract transfer amount
     balance =
         balance - amount;
 
 
-    saveBalance();
-
+    // Update balance
     updateBalance();
 
 
+    // Add transaction
     addTransaction(
-        "Transferred ₹" +
-        amount.toLocaleString("en-IN") +
-        " to account " +
+        "Transfer",
+        amount,
         recipient
     );
 
 
     message.innerText =
-        "₹" +
-        amount.toLocaleString("en-IN") +
+        formatMoney(amount) +
         " transferred successfully.";
 
 
+    // Clear inputs
     document.getElementById(
         "recipientAccount"
     ).value = "";
@@ -583,6 +809,7 @@ function transferMoney() {
     ).value = "";
 
 
+    // Generate receipt
     generateReceipt(
         "Transfer",
         amount,
@@ -593,58 +820,9 @@ function transferMoney() {
 }
 
 
-// ================================================
-// TRANSACTION HISTORY
-// ================================================
-
-function showTransactions() {
-
-    hideAllScreens();
-
-    let screen =
-        document.getElementById(
-            "transactionScreen"
-        );
-
-    if (screen) {
-
-        screen.style.display = "block";
-    }
-}
-
-
-// ================================================
-// ADD TRANSACTION
-// ================================================
-
-function addTransaction(text) {
-
-    let transactions =
-        document.getElementById(
-            "transactions"
-        );
-
-
-    if (!transactions) {
-        return;
-    }
-
-
-    let item =
-        document.createElement("li");
-
-
-    item.innerText =
-        text;
-
-
-    transactions.appendChild(item);
-}
-
-
-// ================================================
+// ==================================================
 // GENERATE RECEIPT
-// ================================================
+// ==================================================
 
 function generateReceipt(
     type,
@@ -666,7 +844,11 @@ function generateReceipt(
         );
 
 
-    if (!receiptSection || !receiptContent) {
+    if (
+        !receiptSection ||
+        !receiptContent
+    ) {
+
         return;
     }
 
@@ -676,18 +858,24 @@ function generateReceipt(
 
 
     let date =
-        now.toLocaleDateString("en-IN");
+        now.toLocaleDateString(
+            "en-IN"
+        );
 
 
     let time =
-        now.toLocaleTimeString("en-IN");
+        now.toLocaleTimeString(
+            "en-IN"
+        );
 
 
-    let receiptHTML = `
+    receiptContent.innerHTML = `
 
         <div class="receipt">
 
-            <h2>🏦 Smart ATM & Banking</h2>
+            <h2>
+                🏦 Smart ATM & Banking
+            </h2>
 
             <p class="receipt-title">
                 TRANSACTION RECEIPT
@@ -695,22 +883,34 @@ function generateReceipt(
 
             <hr>
 
+
             <p>
-                <strong>Transaction:</strong>
+                <strong>
+                    Transaction:
+                </strong>
+
                 ${type}
             </p>
 
+
             <p>
-                <strong>Account Number:</strong>
+                <strong>
+                    Account Number:
+                </strong>
+
                 ${accountNumber}
             </p>
+
 
             ${
                 recipient !== ""
                 ?
                 `
                 <p>
-                    <strong>Recipient:</strong>
+                    <strong>
+                        Recipient:
+                    </strong>
+
                     ${recipient}
                 </p>
                 `
@@ -718,46 +918,68 @@ function generateReceipt(
                 ""
             }
 
-            <p>
-                <strong>Amount:</strong>
-                ₹${amount.toLocaleString("en-IN")}
-            </p>
 
             <p>
-                <strong>Previous Balance:</strong>
-                ₹${previousBalance.toLocaleString("en-IN")}
+                <strong>
+                    Amount:
+                </strong>
+
+                ${formatMoney(amount)}
             </p>
 
-            <p>
-                <strong>New Balance:</strong>
-                ₹${newBalance.toLocaleString("en-IN")}
-            </p>
 
             <p>
-                <strong>Date:</strong>
+                <strong>
+                    Previous Balance:
+                </strong>
+
+                ${formatMoney(previousBalance)}
+            </p>
+
+
+            <p>
+                <strong>
+                    New Balance:
+                </strong>
+
+                ${formatMoney(newBalance)}
+            </p>
+
+
+            <p>
+                <strong>
+                    Date:
+                </strong>
+
                 ${date}
             </p>
 
+
             <p>
-                <strong>Time:</strong>
+                <strong>
+                    Time:
+                </strong>
+
                 ${time}
             </p>
 
+
             <hr>
 
-            <h3>Transaction Successful</h3>
+
+            <h3>
+                Transaction Successful
+            </h3>
+
 
             <p class="demo-note">
-                This is a demo transaction for a
-                college project.
+                This is a demo transaction
+                for a college project.
             </p>
 
         </div>
+
     `;
-
-
-    receiptContent.innerHTML =
-        receiptHTML;
 
 
     receiptSection.style.display =
@@ -765,25 +987,26 @@ function generateReceipt(
 }
 
 
-// ================================================
-// PRINT / SAVE RECEIPT
-// ================================================
+// ==================================================
+// PRINT RECEIPT
+// ==================================================
 
 function printReceipt() {
 
-    let receiptElement =
+    let receiptContent =
         document.getElementById(
             "receiptContent"
         );
 
 
-    if (!receiptElement) {
+    if (!receiptContent) {
+
         return;
     }
 
 
     let receipt =
-        receiptElement.innerHTML;
+        receiptContent.innerHTML;
 
 
     let printWindow =
@@ -810,7 +1033,10 @@ function printReceipt() {
 
         <head>
 
-            <title>Smart ATM Receipt</title>
+            <title>
+                Smart ATM Receipt
+            </title>
+
 
             <style>
 
@@ -853,6 +1079,7 @@ function printReceipt() {
 
         </head>
 
+
         <body>
 
             ${receipt}
@@ -860,6 +1087,7 @@ function printReceipt() {
         </body>
 
         </html>
+
     `);
 
 
@@ -871,11 +1099,17 @@ function printReceipt() {
 }
 
 
-// ================================================
+// ==================================================
 // CREATE ACCOUNT
-// ================================================
+// ==================================================
 
 function createAccount() {
+
+    let accountNumberInput =
+        document.getElementById(
+            "newAccountNumber"
+        );
+
 
     let name =
         document.getElementById(
@@ -921,24 +1155,14 @@ function createAccount() {
         ).value;
 
 
-    let newAccountNumberElement =
-        document.getElementById(
-            "newAccountNumber"
-        );
-
-
     let message =
         document.getElementById(
             "createMessage"
         );
 
 
-    // ============================================
-    // VALIDATION
-    // ============================================
-
-
-    if (!newAccountNumberElement) {
+    // Account number field
+    if (!accountNumberInput) {
 
         message.innerText =
             "Account number field is missing.";
@@ -948,11 +1172,15 @@ function createAccount() {
 
 
     let newAccountNumber =
-        newAccountNumberElement.value.trim();
+        accountNumberInput.value.trim();
 
 
-    // Account number
-    if (!/^[0-9]{14}$/.test(newAccountNumber)) {
+    // 14-digit account number
+    if (
+        !/^[0-9]{14}$/.test(
+            newAccountNumber
+        )
+    ) {
 
         message.innerText =
             "Account number must contain exactly 14 digits.";
@@ -961,8 +1189,11 @@ function createAccount() {
     }
 
 
-    // Prevent using permanent demo account
-    if (newAccountNumber === DEMO_ACCOUNT) {
+    // Don't allow demo account number
+    if (
+        newAccountNumber ===
+        DEMO_ACCOUNT
+    ) {
 
         message.innerText =
             "This account number is reserved for the demo account. Please use another 14-digit number.";
@@ -982,7 +1213,11 @@ function createAccount() {
 
 
     // Mobile
-    if (!/^[0-9]{10}$/.test(mobile)) {
+    if (
+        !/^[0-9]{10}$/.test(
+            mobile
+        )
+    ) {
 
         message.innerText =
             "Please enter a valid 10-digit mobile number.";
@@ -1015,7 +1250,11 @@ function createAccount() {
 
 
     // PIN
-    if (!/^[0-9]{4}$/.test(pin)) {
+    if (
+        !/^[0-9]{4}$/.test(
+            pin
+        )
+    ) {
 
         message.innerText =
             "PIN must contain exactly 4 digits.";
@@ -1025,7 +1264,9 @@ function createAccount() {
 
 
     // Confirm PIN
-    if (pin !== confirmPin) {
+    if (
+        pin !== confirmPin
+    ) {
 
         message.innerText =
             "PINs do not match.";
@@ -1034,9 +1275,9 @@ function createAccount() {
     }
 
 
-    // ============================================
-    // SAVE ACCOUNT
-    // ============================================
+    // ==================================================
+    // SAVE ACCOUNT DETAILS
+    // ==================================================
 
     localStorage.setItem(
         "accountNumber",
@@ -1074,24 +1315,24 @@ function createAccount() {
     );
 
 
-    localStorage.setItem(
-        "accountBalance",
-        initialDeposit
+    // We don't save the balance.
+    // Dashboard always starts at ₹25,000.
+
+
+    // Remove previous login
+    localStorage.removeItem(
+        "loggedInAccount"
     );
 
 
-    // Set current account
-    accountNumber =
-        newAccountNumber;
+    localStorage.removeItem(
+        "loggedInName"
+    );
 
 
-    balance =
-        initialDeposit;
-
-
-    // ============================================
+    // ==================================================
     // SUCCESS MESSAGE
-    // ============================================
+    // ==================================================
 
     message.innerHTML = `
 
@@ -1101,25 +1342,23 @@ function createAccount() {
 
         <br><br>
 
-        <strong>
-            Your Account Number:
-        </strong>
-
-        <br>
-
-        <span
-            style="
-                font-size:22px;
-                color:#1769aa;
-                font-weight:bold;
-            "
-        >
-            ${newAccountNumber}
-        </span>
+        Your 14-digit account number has been saved.
 
         <br><br>
 
-        Please remember your account number and PIN.
+        <strong>
+            Account Number:
+        </strong>
+
+        ${newAccountNumber}
+
+        <br>
+
+        <strong>
+            PIN:
+        </strong>
+
+        ${pin}
 
         <br><br>
 
@@ -1128,23 +1367,61 @@ function createAccount() {
         </a>
 
     `;
-
-
-    // Don't generate another account number
 }
 
 
-// ================================================
-// INITIALIZE DASHBOARD
-// ================================================
+// ==================================================
+// PAGE LOAD
+// ==================================================
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        loadAccount();
 
-        updateBalance();
+        // ==================================================
+        // CHECK IF DASHBOARD
+        // ==================================================
+
+        let homeScreen =
+            document.getElementById(
+                "homeScreen"
+            );
+
+
+        if (homeScreen) {
+
+
+            // Load logged-in account
+            let accountLoaded =
+                loadDashboardAccount();
+
+
+            if (!accountLoaded) {
+
+                return;
+            }
+
+
+            // ==================================================
+            // RESET BALANCE TO ₹25,000
+            // ==================================================
+
+            balance =
+                FIXED_BALANCE;
+
+
+            // Update balance
+            updateBalance();
+
+
+            // ==================================================
+            // RESET TRANSACTION HISTORY
+            // ==================================================
+
+            resetTransactionHistory();
+
+        }
 
     }
 );
