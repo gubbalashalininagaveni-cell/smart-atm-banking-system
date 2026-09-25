@@ -28,7 +28,8 @@ function login() {
 
 let balance = 25000;
 
-let accountNumber = "1234567890";
+let accountNumber =
+    localStorage.getItem("accountNumber") || "10001234567890";
 
 
 // ================================
@@ -552,4 +553,168 @@ function printReceipt() {
     printWindow.focus();
 
     printWindow.print();
+}
+// ================================
+// CREATE ACCOUNT
+// ================================
+
+function createAccount() {
+
+    let name =
+        document.getElementById("fullName").value.trim();
+
+    let mobile =
+        document.getElementById("mobile").value.trim();
+
+    let email =
+        document.getElementById("email").value.trim();
+
+    let accountType =
+        document.getElementById("accountType").value;
+
+    let initialDeposit =
+        Number(document.getElementById("initialDeposit").value);
+
+    let pin =
+        document.getElementById("newPin").value;
+
+    let confirmPin =
+        document.getElementById("confirmPin").value;
+
+    let message =
+        document.getElementById("createMessage");
+
+
+    // Check name
+    if (name === "") {
+
+        message.innerText =
+            "Please enter your full name.";
+
+        return;
+    }
+
+
+    // Check mobile number
+    if (!/^[0-9]{10}$/.test(mobile)) {
+
+        message.innerText =
+            "Please enter a valid 10-digit mobile number.";
+
+        return;
+    }
+
+
+    // Check email
+    if (email === "") {
+
+        message.innerText =
+            "Please enter your email address.";
+
+        return;
+    }
+
+
+    // Check initial deposit
+    if (initialDeposit < 0 || isNaN(initialDeposit)) {
+
+        message.innerText =
+            "Please enter a valid initial deposit.";
+
+        return;
+    }
+
+
+    // Check PIN
+    if (!/^[0-9]{4}$/.test(pin)) {
+
+        message.innerText =
+            "PIN must contain exactly 4 digits.";
+
+        return;
+    }
+
+
+    // Check confirm PIN
+    if (pin !== confirmPin) {
+
+        message.innerText =
+            "PINs do not match.";
+
+        return;
+    }
+
+
+    // Generate 14-digit account number
+    let newAccountNumber =
+        "1000" +
+        Math.floor(
+            1000000000 +
+            Math.random() * 9000000000
+        ).toString();
+
+
+    // Save account details
+    localStorage.setItem(
+        "accountNumber",
+        newAccountNumber
+    );
+
+    localStorage.setItem(
+        "accountName",
+        name
+    );
+
+    localStorage.setItem(
+        "accountMobile",
+        mobile
+    );
+
+    localStorage.setItem(
+        "accountEmail",
+        email
+    );
+
+    localStorage.setItem(
+        "accountType",
+        accountType
+    );
+
+    localStorage.setItem(
+        "accountPin",
+        pin
+    );
+
+    localStorage.setItem(
+        "accountBalance",
+        initialDeposit
+    );
+
+
+    // Update current account
+    accountNumber = newAccountNumber;
+
+    balance = initialDeposit;
+
+
+    // Show success message
+    message.innerHTML =
+
+        "Account created successfully! 🎉<br><br>" +
+
+        "<strong>Your 14-digit Account Number:</strong><br>" +
+
+        "<span style='font-size:22px; color:#1769aa;'>" +
+
+        newAccountNumber +
+
+        "</span><br><br>" +
+
+        "Please remember your account number and PIN.";
+
+
+    // Disable create button
+    document.querySelector(
+        ".login-container button"
+    ).disabled = true;
 }
