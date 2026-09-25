@@ -847,3 +847,18 @@ body {
     }
 
 }
+.create-account-text {
+    margin-top: 18px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.create-account-text a {
+    color: #1769aa;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.create-account-text a:hover {
+    text-decoration: underline;
+}
