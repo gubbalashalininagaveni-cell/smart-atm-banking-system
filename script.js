@@ -4,13 +4,34 @@
 
 function login() {
 
-    let accountNumber =
-        document.getElementById("accountNumber").value;
+    let enteredAccount =
+        document.getElementById("accountNumber").value.trim();
 
-    let pin =
-        document.getElementById("pin").value;
+    let enteredPin =
+        document.getElementById("pin").value.trim();
 
-    if (accountNumber === "1234567890" && pin === "1234") {
+    let savedAccount =
+        localStorage.getItem("accountNumber");
+
+    let savedPin =
+        localStorage.getItem("accountPin");
+
+
+    // Check if an account has been created
+    if (!savedAccount || !savedPin) {
+
+        document.getElementById("message").innerText =
+            "No account found. Please create an account first.";
+
+        return;
+    }
+
+
+    // Check account number and PIN
+    if (
+        enteredAccount === savedAccount &&
+        enteredPin === savedPin
+    ) {
 
         window.location.href = "dashboard.html";
 
@@ -20,8 +41,6 @@ function login() {
             "Invalid account number or PIN.";
     }
 }
-
-
 // ================================
 // BANK DETAILS
 // ================================
