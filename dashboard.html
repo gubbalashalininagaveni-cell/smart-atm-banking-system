@@ -190,25 +190,33 @@
 
 
             <!-- Transaction Screen -->
-            <div id="transactionScreen" class="operation-screen">
+           
+<div id="transactionScreen" class="operation-screen">
+    <h1>Transaction History</h1>
+    <p>View your recent demo transactions.</p>
 
-                <h1>Transaction History</h1>
+    <div class="transaction-card">
+        <ul id="transactions">
+            <li>Account created — ₹25,000</li>
+        </ul>
+    </div>
 
-                <p>View your recent demo transactions.</p>
+    <!-- Receipt Section -->
+    <div id="receiptSection" class="receipt-section">
 
-                <div class="transaction-card">
+        <h2>🧾 Transaction Receipt</h2>
 
-                    <ul id="transactions">
+        <div id="receiptContent">
+            <!-- Receipt will appear here -->
+        </div>
 
-                        <li>
-                            Account created — ₹25,000
-                        </li>
+        <button onclick="printReceipt()" class="receipt-button">
+            🖨️ Print / Save Receipt
+        </button>
 
-                    </ul>
+    </div>
 
-                </div>
-
-            </div>
+</div>
 
         </main>
 
