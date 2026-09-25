@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Smart ATM & Banking System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    ```
+    <!-- Top Navigation -->
+    <nav class="navbar">
+
+        <h2>Smart ATM</h2>
+
+        <div>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="index.html">Logout</a>
+        </div>
+
+    </nav>
+
+
+    <!-- Main Layout -->
+    <div class="main-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <h3>Banking Menu</h3>
+
+            <button onclick="showHome()">
+                🏠 Dashboard
+            </button>
+
+            <button onclick="showDeposit()">
+                💰 Deposit
+            </button>
+
+            <button onclick="showWithdraw()">
+                💸 Withdraw
+            </button>
+
+            <button onclick="showTransfer()">
+                🔄 Transfer
+            </button>
+
+            <button onclick="showTransactions()">
+                📋 Transactions
+            </button>
+
+        </aside>
+
+
+        <!-- Large Main Screen -->
+        <main class="content">
+
+            <!-- Home Screen -->
+            <div id="homeScreen">
+
+                <h1>Welcome to Smart ATM</h1>
+
+                <p>Manage your demo bank account easily.</p>
+
+
+                <div class="balance-card">
+
+                    <p>Available Balance</p>
+
+                    <h1 id="balance">₹25,000</h1>
+
+                </div>
+
+
+                <div class="quick-actions">
+
+                    <button onclick="showDeposit()">
+                        Deposit Money
+                    </button>
+
+                    <button onclick="showWithdraw()">
+                        Withdraw Money
+                    </button>
+
+                    <button onclick="showTransfer()">
+                        Transfer Money
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Deposit Screen -->
+            <div id="depositScreen" class="operation-screen">
+
+                <h1>Deposit Money</h1>
+
+                <p>Add money to your demo bank account.</p>
+
+                <div class="operation-card">
+
+                    <h3>Current Balance</h3>
+
+                    <h2 id="depositBalance">₹25,000</h2>
+
+                    <label>Enter Amount</label>
+
+                    <input type="number"
+                           id="depositAmount"
+                           placeholder="Enter amount">
+
+                    <button onclick="depositMoney()">
+                        Deposit Money
+                    </button>
+
+                    <p id="depositMessage"></p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Withdraw Screen -->
+            <div id="withdrawScreen" class="operation-screen">
+
+                <h1>Withdraw Money</h1>
+
+                <p>Withdraw money from your demo account.</p>
+
+                <div class="operation-card">
+
+                    <h3>Current Balance</h3>
+
+                    <h2 id="withdrawBalance">₹25,000</h2>
+
+                    <label>Enter Amount</label>
+
+                    <input type="number"
+                           id="withdrawAmount"
+                           placeholder="Enter amount">
+
+                    <button onclick="withdrawMoney()">
+                        Withdraw Money
+                    </button>
+
+                    <p id="withdrawMessage"></p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Transfer Screen -->
+            <div id="transferScreen" class="operation-screen">
+
+                <h1>Transfer Money</h1>
+
+                <p>Transfer money to another demo account.</p>
+
+                <div class="operation-card">
+
+                    <h3>Current Balance</h3>
+
+                    <h2 id="transferBalance">₹25,000</h2>
+
+                    <label>Recipient Account Number</label>
+
+                    <input type="text"
+                           id="recipientAccount"
+                           placeholder="Enter account number">
+
+                    <label>Transfer Amount</label>
+
+                    <input type="number"
+                           id="transferAmount"
+                           placeholder="Enter amount">
+
+                    <button onclick="transferMoney()">
+                        Transfer Money
+                    </button>
+
+                    <p id="transferMessage"></p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Transaction Screen -->
+            <div id="transactionScreen" class="operation-screen">
+
+                <h1>Transaction History</h1>
+
+                <p>View your recent demo transactions.</p>
+
+                <div class="transaction-card">
+
+                    <ul id="transactions">
+
+                        <li>
+                            Account created — ₹25,000
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <script src="script.js"></script>
+    ```
+
+</body>
+
+</html>

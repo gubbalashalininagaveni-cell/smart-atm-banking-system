@@ -1,0 +1,731 @@
+﻿/* ================================
+   GLOBAL
+================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f5f7fb;
+    color: #1e293b;
+}
+
+
+/* ================================
+   NAVBAR
+================================ */
+
+.navbar {
+    height: 72px;
+    background: #14213d;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+    .navbar h2 {
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        margin-left: 28px;
+        font-size: 15px;
+    }
+
+        .navbar a:hover {
+            color: #8ecae6;
+        }
+
+
+/* ================================
+   MAIN LAYOUT
+================================ */
+
+.main-container {
+    display: flex;
+    min-height: calc(100vh - 72px);
+}
+
+
+/* ================================
+   SIDEBAR
+================================ */
+
+.sidebar {
+    width: 245px;
+    background: #ffffff;
+    padding: 30px 18px;
+    border-right: 1px solid #e5e7eb;
+}
+
+    .sidebar h3 {
+        color: #64748b;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+        padding-left: 12px;
+    }
+
+    .sidebar button {
+        width: 100%;
+        background: transparent;
+        color: #475569;
+        border: none;
+        text-align: left;
+        padding: 14px 16px;
+        margin-bottom: 8px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 15px;
+        transition: 0.2s;
+    }
+
+        .sidebar button:hover {
+            background: #eef6ff;
+            color: #1769aa;
+            transform: translateX(3px);
+        }
+
+
+/* ================================
+   CONTENT
+================================ */
+
+.content {
+    flex: 1;
+    padding: 45px;
+    background: #f5f7fb;
+}
+
+    .content h1 {
+        font-size: 32px;
+        color: #14213d;
+        margin-bottom: 10px;
+    }
+
+    .content > div > p {
+        color: #64748b;
+    }
+
+
+/* ================================
+   BALANCE CARD
+================================ */
+
+.balance-card {
+    width: 100%;
+    max-width: 750px;
+    margin-top: 30px;
+    padding: 35px;
+    background: linear-gradient( 135deg, #14213d, #2457a6 );
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(20,33,61,0.20);
+}
+
+    .balance-card p {
+        color: #dbeafe;
+        margin-bottom: 12px;
+    }
+
+    .balance-card h1 {
+        color: white;
+        font-size: 40px;
+    }
+
+
+/* ================================
+   QUICK ACTIONS
+================================ */
+
+.quick-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+    .quick-actions button {
+        background: white;
+        color: #14213d;
+        border: 1px solid #e2e8f0;
+        padding: 15px 24px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        transition: 0.2s;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+        .quick-actions button:hover {
+            background: #1769aa;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+
+/* ================================
+   OPERATION SCREENS
+================================ */
+
+.operation-screen {
+    display: none;
+    max-width: 850px;
+}
+
+    .operation-screen h1 {
+        font-size: 34px;
+        color: #14213d;
+        margin-bottom: 8px;
+    }
+
+
+/* ================================
+   OPERATION CARD
+================================ */
+
+.operation-card {
+    background: white;
+    max-width: 700px;
+    margin-top: 35px;
+    padding: 42px;
+    border-radius: 20px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+    .operation-card h3 {
+        color: #64748b;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .operation-card h2 {
+        color: #14213d;
+        font-size: 30px;
+        margin-bottom: 35px;
+    }
+
+
+    /* ================================
+   LABEL
+================================ */
+
+    .operation-card label {
+        display: block;
+        color: #334155;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+
+    /* ================================
+   INPUT BOX
+================================ */
+
+    .operation-card input {
+        width: 100%;
+        height: 58px;
+        padding: 0 18px;
+        margin-bottom: 22px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        background: #f8fafc;
+        color: #1e293b;
+        font-size: 17px;
+        outline: none;
+        transition: 0.2s;
+    }
+
+        .operation-card input:focus {
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.10);
+        }
+
+        .operation-card input::placeholder {
+            color: #94a3b8;
+        }
+
+
+    /* ================================
+   OPERATION BUTTON
+================================ */
+
+    .operation-card button {
+        width: 100%;
+        height: 56px;
+        background: #1769aa;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+        .operation-card button:hover {
+            background: #12558a;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(23,105,170,0.20);
+        }
+
+
+/* ================================
+   MESSAGES
+================================ */
+
+#depositMessage,
+#withdrawMessage,
+#transferMessage {
+    margin-top: 18px;
+    font-weight: 600;
+    color: #1769aa;
+}
+
+
+/* ================================
+   TRANSACTION HISTORY
+================================ */
+
+.transaction-card {
+    background: white;
+    max-width: 850px;
+    margin-top: 30px;
+    padding: 25px;
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+}
+
+    .transaction-card ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .transaction-card li {
+        padding: 18px;
+        border-bottom: 1px solid #eef2f7;
+        color: #475569;
+    }
+
+        .transaction-card li:last-child {
+            border-bottom: none;
+        }
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 768px) {
+
+    .main-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .content {
+        padding: 25px;
+    }
+
+    .navbar {
+        padding: 0 20px;
+    }
+
+        .navbar a {
+            margin-left: 12px;
+        }
+
+    .operation-card {
+        padding: 25px;
+    }
+
+    .balance-card h1 {
+        font-size: 32px;
+    }
+}
+
+/* ================================
+   LOGIN PAGE
+================================ */
+
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient( 135deg, #eef5ff, #f8fbff );
+    padding: 20px;
+}
+
+
+/* LOGIN CARD */
+
+.login-container {
+    width: 100%;
+    max-width: 440px;
+    background: white;
+    padding: 45px;
+    border-radius: 22px;
+    text-align: center;
+    box-shadow: 0 15px 45px rgba(20, 33, 61, 0.12);
+    border: 1px solid #e5e7eb;
+}
+
+
+/* ICON */
+
+.login-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef6ff;
+    border-radius: 18px;
+    font-size: 34px;
+}
+
+
+/* HEADING */
+
+.login-container h1 {
+    color: #14213d;
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+
+/* DESCRIPTION */
+
+.login-container > p {
+    color: #64748b;
+    margin-bottom: 30px;
+    font-size: 15px;
+}
+
+
+/* LABEL */
+
+.login-container label {
+    display: block;
+    text-align: left;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+
+/* INPUT */
+
+.login-container input {
+    width: 100%;
+    height: 55px;
+    padding: 0 16px;
+    margin-bottom: 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 11px;
+    background: #f8fafc;
+    font-size: 16px;
+    outline: none;
+}
+
+
+    .login-container input:focus {
+        border-color: #3b82f6;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(59,130,246,0.10);
+    }
+
+
+/* LOGIN BUTTON */
+
+.login-container button {
+    width: 100%;
+    height: 55px;
+    border: none;
+    border-radius: 11px;
+    background: #1769aa;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+
+    .login-container button:hover {
+        background: #12558a;
+        transform: translateY(-1px);
+    }
+
+
+/* ERROR MESSAGE */
+
+#message {
+    margin-top: 15px;
+    color: #dc2626;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* DEMO INFORMATION */
+
+.demo-info {
+    margin-top: 25px;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 10px;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
+}
+/* ================================
+   HOME PAGE
+================================ */
+
+.home-page {
+    min-height: 100vh;
+    background: linear-gradient( 135deg, #eef5ff 0%, #f8fbff 50%, #eaf3ff 100% );
+    color: #14213d;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ================================
+   HOME NAVBAR
+================================ */
+
+.home-navbar {
+    height: 75px;
+    width: 100%;
+    background: #14213d;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+}
+
+
+.logo {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+
+.home-links {
+    display: flex;
+    gap: 35px;
+}
+
+
+    .home-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 500;
+        transition: 0.2s;
+    }
+
+
+        .home-links a:hover {
+            color: #8ecae6;
+        }
+
+
+/* ================================
+   HERO
+================================ */
+
+.home-hero {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 70px 20px 50px;
+}
+
+
+.hero-content {
+    max-width: 850px;
+}
+
+
+/* ICON */
+
+.hero-icon {
+    width: 85px;
+    height: 85px;
+    margin: 0 auto 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 24px;
+    font-size: 42px;
+    box-shadow: 0 10px 30px rgba(20,33,61,0.10);
+}
+
+
+/* HEADING */
+
+.hero-content h1 {
+    font-size: 52px;
+    line-height: 1.15;
+    color: #14213d;
+    margin-bottom: 20px;
+}
+
+
+/* DESCRIPTION */
+
+.hero-content p {
+    max-width: 650px;
+    margin: 0 auto 32px;
+    color: #64748b;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+
+/* LOGIN BUTTON */
+
+.hero-login-button {
+    padding: 16px 34px;
+    background: #1769aa;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(23,105,170,0.20);
+    transition: 0.2s;
+}
+
+
+    .hero-login-button:hover {
+        background: #12558a;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(23,105,170,0.25);
+    }
+
+
+/* ================================
+   FEATURE CARDS
+================================ */
+
+.home-features {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 60px;
+    flex-wrap: wrap;
+}
+
+
+.feature-card {
+    width: 230px;
+    background: white;
+    padding: 25px 20px;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    transition: 0.2s;
+}
+
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
+
+
+    .feature-card span {
+        font-size: 28px;
+    }
+
+
+    .feature-card h3 {
+        margin: 12px 0 8px;
+        color: #14213d;
+        font-size: 17px;
+    }
+
+
+    .feature-card p {
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+
+/* ================================
+   FOOTER
+================================ */
+
+.home-footer {
+    text-align: center;
+    padding: 20px;
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* ================================
+   MOBILE HOME PAGE
+================================ */
+
+@media (max-width: 768px) {
+
+    .home-navbar {
+        padding: 0 20px;
+    }
+
+    .hero-content h1 {
+        font-size: 36px;
+    }
+
+    .hero-content p {
+        font-size: 16px;
+    }
+
+    .home-links {
+        gap: 15px;
+    }
+
+    .feature-card {
+        width: 100%;
+        max-width: 320px;
+    }
+}

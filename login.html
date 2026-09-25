@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login - Smart ATM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="login-page">
+
+    <div class="login-container">
+
+        <div class="login-icon">
+            🏦
+        </div>
+
+        <h1>Welcome Back</h1>
+
+        <p>Login to your Smart ATM account</p>
+
+        <label>Account Number</label>
+
+        <input type="text"
+               id="accountNumber"
+               placeholder="Enter account number">
+
+        <label>PIN</label>
+
+        <input type="password"
+               id="pin"
+               placeholder="Enter your PIN">
+
+        <button onclick="login()">
+            Login
+        </button>
+
+        <p id="message"></p>
+
+        <div class="demo-info">
+            Demo Account<br>
+            Account: 1234567890<br>
+            PIN: 1234
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
