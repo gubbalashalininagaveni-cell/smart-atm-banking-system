@@ -1,6 +1,32 @@
-// ================================
+// ================================================
+// SMART ATM & BANKING SYSTEM
+// Complete JavaScript
+// ================================================
+
+
+// ================================================
+// PERMANENT DEMO ACCOUNT
+// ================================================
+
+const DEMO_ACCOUNT = "10000000000001";
+const DEMO_PIN = "1234";
+const DEMO_NAME = "Demo User";
+
+
+// ================================================
+// CURRENT ACCOUNT
+// ================================================
+
+let accountNumber =
+    localStorage.getItem("accountNumber") || "";
+
+let balance =
+    Number(localStorage.getItem("accountBalance")) || 0;
+
+
+// ================================================
 // LOGIN
-// ================================
+// ================================================
 
 function login() {
 
@@ -10,6 +36,38 @@ function login() {
     let enteredPin =
         document.getElementById("pin").value.trim();
 
+    let message =
+        document.getElementById("message");
+
+
+    // Check permanent demo account
+    if (
+        enteredAccount === DEMO_ACCOUNT &&
+        enteredPin === DEMO_PIN
+    ) {
+
+        localStorage.setItem(
+            "loggedInAccount",
+            DEMO_ACCOUNT
+        );
+
+        localStorage.setItem(
+            "loggedInName",
+            DEMO_NAME
+        );
+
+        localStorage.setItem(
+            "loggedInBalance",
+            "25000"
+        );
+
+        window.location.href = "dashboard.html";
+
+        return;
+    }
+
+
+    // Check created account
     let savedAccount =
         localStorage.getItem("accountNumber");
 
@@ -17,48 +75,114 @@ function login() {
         localStorage.getItem("accountPin");
 
 
-    // Check if an account has been created
-    if (!savedAccount || !savedPin) {
+    if (
+        savedAccount &&
+        savedPin &&
+        enteredAccount === savedAccount &&
+        enteredPin === savedPin
+    ) {
 
-        document.getElementById("message").innerText =
-            "No account found. Please create an account first.";
+        localStorage.setItem(
+            "loggedInAccount",
+            savedAccount
+        );
+
+        localStorage.setItem(
+            "loggedInName",
+            localStorage.getItem("accountName") || "Account Holder"
+        );
+
+        localStorage.setItem(
+            "loggedInBalance",
+            localStorage.getItem("accountBalance") || "0"
+        );
+
+        window.location.href = "dashboard.html";
 
         return;
     }
 
 
-    // Check account number and PIN
-    if (
-        enteredAccount === savedAccount &&
-        enteredPin === savedPin
-    ) {
+    // Invalid login
+    message.innerText =
+        "Invalid account number or PIN.";
+}
 
-        window.location.href = "dashboard.html";
+
+// ================================================
+// LOAD CURRENT LOGGED-IN ACCOUNT
+// ================================================
+
+function loadAccount() {
+
+    let loggedInAccount =
+        localStorage.getItem("loggedInAccount");
+
+    let loggedInBalance =
+        localStorage.getItem("loggedInBalance");
+
+
+    if (loggedInAccount) {
+
+        accountNumber = loggedInAccount;
+    }
+
+
+    if (loggedInBalance !== null) {
+
+        balance =
+            Number(loggedInBalance);
+    }
+
+
+    // Demo account
+    if (accountNumber === DEMO_ACCOUNT) {
+
+        balance = Number(
+            localStorage.getItem("demoBalance") || "25000"
+        );
+    }
+}
+
+
+// ================================================
+// SAVE CURRENT BALANCE
+// ================================================
+
+function saveBalance() {
+
+    localStorage.setItem(
+        "loggedInBalance",
+        balance
+    );
+
+
+    if (accountNumber === DEMO_ACCOUNT) {
+
+        localStorage.setItem(
+            "demoBalance",
+            balance
+        );
 
     } else {
 
-        document.getElementById("message").innerText =
-            "Invalid account number or PIN.";
+        localStorage.setItem(
+            "accountBalance",
+            balance
+        );
     }
 }
-// ================================
-// BANK DETAILS
-// ================================
-
-let balance = 25000;
-
-let accountNumber =
-    localStorage.getItem("accountNumber") || "10001234567890";
 
 
-// ================================
-// UPDATE BALANCE
-// ================================
+// ================================================
+// UPDATE BALANCE DISPLAY
+// ================================================
 
 function updateBalance() {
 
     let balanceText =
         "₹" + balance.toLocaleString("en-IN");
+
 
     let mainBalance =
         document.getElementById("balance");
@@ -74,77 +198,128 @@ function updateBalance() {
 
 
     if (mainBalance) {
-        mainBalance.innerText = balanceText;
+
+        mainBalance.innerText =
+            balanceText;
     }
+
 
     if (depositBalance) {
-        depositBalance.innerText = balanceText;
+
+        depositBalance.innerText =
+            balanceText;
     }
+
 
     if (withdrawBalance) {
-        withdrawBalance.innerText = balanceText;
+
+        withdrawBalance.innerText =
+            balanceText;
     }
 
+
     if (transferBalance) {
-        transferBalance.innerText = balanceText;
+
+        transferBalance.innerText =
+            balanceText;
     }
 }
 
 
-// ================================
+// ================================================
 // HIDE ALL SCREENS
-// ================================
+// ================================================
 
 function hideAllScreens() {
 
-    document.getElementById("homeScreen").style.display = "none";
+    let home =
+        document.getElementById("homeScreen");
 
-    document.getElementById("depositScreen").style.display = "none";
+    let deposit =
+        document.getElementById("depositScreen");
 
-    document.getElementById("withdrawScreen").style.display = "none";
+    let withdraw =
+        document.getElementById("withdrawScreen");
 
-    document.getElementById("transferScreen").style.display = "none";
+    let transfer =
+        document.getElementById("transferScreen");
 
-    document.getElementById("transactionScreen").style.display = "none";
+    let transactions =
+        document.getElementById("transactionScreen");
+
+
+    if (home) {
+        home.style.display = "none";
+    }
+
+    if (deposit) {
+        deposit.style.display = "none";
+    }
+
+    if (withdraw) {
+        withdraw.style.display = "none";
+    }
+
+    if (transfer) {
+        transfer.style.display = "none";
+    }
+
+    if (transactions) {
+        transactions.style.display = "none";
+    }
 }
 
 
-// ================================
+// ================================================
 // HOME
-// ================================
+// ================================================
 
 function showHome() {
 
     hideAllScreens();
 
-    document.getElementById("homeScreen").style.display = "block";
+    let home =
+        document.getElementById("homeScreen");
+
+    if (home) {
+
+        home.style.display = "block";
+    }
 
     updateBalance();
 }
 
 
-// ================================
+// ================================================
 // DEPOSIT SCREEN
-// ================================
+// ================================================
 
 function showDeposit() {
 
     hideAllScreens();
 
-    document.getElementById("depositScreen").style.display = "block";
+    let screen =
+        document.getElementById("depositScreen");
+
+    if (screen) {
+
+        screen.style.display = "block";
+    }
 
     updateBalance();
 }
 
 
-// ================================
+// ================================================
 // DEPOSIT MONEY
-// ================================
+// ================================================
 
 function depositMoney() {
 
     let amount =
-        Number(document.getElementById("depositAmount").value);
+        Number(
+            document.getElementById("depositAmount").value
+        );
 
     let message =
         document.getElementById("depositMessage");
@@ -159,9 +334,15 @@ function depositMoney() {
     }
 
 
-    let previousBalance = balance;
+    let previousBalance =
+        balance;
 
-    balance = balance + amount;
+
+    balance =
+        balance + amount;
+
+
+    saveBalance();
 
     updateBalance();
 
@@ -177,10 +358,12 @@ function depositMoney() {
         amount.toLocaleString("en-IN") +
         " deposited successfully.";
 
-    document.getElementById("depositAmount").value = "";
+
+    document.getElementById(
+        "depositAmount"
+    ).value = "";
 
 
-    // Generate receipt
     generateReceipt(
         "Deposit",
         amount,
@@ -190,28 +373,36 @@ function depositMoney() {
 }
 
 
-// ================================
+// ================================================
 // WITHDRAW SCREEN
-// ================================
+// ================================================
 
 function showWithdraw() {
 
     hideAllScreens();
 
-    document.getElementById("withdrawScreen").style.display = "block";
+    let screen =
+        document.getElementById("withdrawScreen");
+
+    if (screen) {
+
+        screen.style.display = "block";
+    }
 
     updateBalance();
 }
 
 
-// ================================
+// ================================================
 // WITHDRAW MONEY
-// ================================
+// ================================================
 
 function withdrawMoney() {
 
     let amount =
-        Number(document.getElementById("withdrawAmount").value);
+        Number(
+            document.getElementById("withdrawAmount").value
+        );
 
     let message =
         document.getElementById("withdrawMessage");
@@ -235,9 +426,15 @@ function withdrawMoney() {
     }
 
 
-    let previousBalance = balance;
+    let previousBalance =
+        balance;
 
-    balance = balance - amount;
+
+    balance =
+        balance - amount;
+
+
+    saveBalance();
 
     updateBalance();
 
@@ -253,10 +450,12 @@ function withdrawMoney() {
         amount.toLocaleString("en-IN") +
         " withdrawn successfully.";
 
-    document.getElementById("withdrawAmount").value = "";
+
+    document.getElementById(
+        "withdrawAmount"
+    ).value = "";
 
 
-    // Generate receipt
     generateReceipt(
         "Withdrawal",
         amount,
@@ -266,40 +465,65 @@ function withdrawMoney() {
 }
 
 
-// ================================
+// ================================================
 // TRANSFER SCREEN
-// ================================
+// ================================================
 
 function showTransfer() {
 
     hideAllScreens();
 
-    document.getElementById("transferScreen").style.display = "block";
+    let screen =
+        document.getElementById("transferScreen");
+
+    if (screen) {
+
+        screen.style.display = "block";
+    }
 
     updateBalance();
 }
 
 
-// ================================
+// ================================================
 // TRANSFER MONEY
-// ================================
+// ================================================
 
 function transferMoney() {
 
     let recipient =
-        document.getElementById("recipientAccount").value;
+        document.getElementById(
+            "recipientAccount"
+        ).value.trim();
+
 
     let amount =
-        Number(document.getElementById("transferAmount").value);
+        Number(
+            document.getElementById(
+                "transferAmount"
+            ).value
+        );
+
 
     let message =
-        document.getElementById("transferMessage");
+        document.getElementById(
+            "transferMessage"
+        );
 
 
-    if (recipient === "") {
+    if (!/^[0-9]{14}$/.test(recipient)) {
 
         message.innerText =
-            "Please enter recipient account number.";
+            "Recipient account number must contain exactly 14 digits.";
+
+        return;
+    }
+
+
+    if (recipient === accountNumber) {
+
+        message.innerText =
+            "You cannot transfer money to your own account.";
 
         return;
     }
@@ -323,9 +547,15 @@ function transferMoney() {
     }
 
 
-    let previousBalance = balance;
+    let previousBalance =
+        balance;
 
-    balance = balance - amount;
+
+    balance =
+        balance - amount;
+
+
+    saveBalance();
 
     updateBalance();
 
@@ -343,12 +573,17 @@ function transferMoney() {
         amount.toLocaleString("en-IN") +
         " transferred successfully.";
 
-    document.getElementById("recipientAccount").value = "";
 
-    document.getElementById("transferAmount").value = "";
+    document.getElementById(
+        "recipientAccount"
+    ).value = "";
 
 
-    // Generate receipt
+    document.getElementById(
+        "transferAmount"
+    ).value = "";
+
+
     generateReceipt(
         "Transfer",
         amount,
@@ -359,39 +594,58 @@ function transferMoney() {
 }
 
 
-// ================================
+// ================================================
 // TRANSACTION HISTORY
-// ================================
+// ================================================
 
 function showTransactions() {
 
     hideAllScreens();
 
-    document.getElementById("transactionScreen").style.display = "block";
+    let screen =
+        document.getElementById(
+            "transactionScreen"
+        );
+
+    if (screen) {
+
+        screen.style.display = "block";
+    }
 }
 
 
-// ================================
+// ================================================
 // ADD TRANSACTION
-// ================================
+// ================================================
 
 function addTransaction(text) {
 
     let transactions =
-        document.getElementById("transactions");
+        document.getElementById(
+            "transactions"
+        );
+
+
+    if (!transactions) {
+        return;
+    }
+
 
     let item =
         document.createElement("li");
 
-    item.innerText = text;
+
+    item.innerText =
+        text;
+
 
     transactions.appendChild(item);
 }
 
 
-// ================================
+// ================================================
 // GENERATE RECEIPT
-// ================================
+// ================================================
 
 function generateReceipt(
     type,
@@ -402,16 +656,29 @@ function generateReceipt(
 ) {
 
     let receiptSection =
-        document.getElementById("receiptSection");
+        document.getElementById(
+            "receiptSection"
+        );
+
 
     let receiptContent =
-        document.getElementById("receiptContent");
+        document.getElementById(
+            "receiptContent"
+        );
 
 
-    let now = new Date();
+    if (!receiptSection || !receiptContent) {
+        return;
+    }
+
+
+    let now =
+        new Date();
+
 
     let date =
         now.toLocaleDateString("en-IN");
+
 
     let time =
         now.toLocaleTimeString("en-IN");
@@ -442,10 +709,12 @@ function generateReceipt(
             ${
                 recipient !== ""
                 ?
-                `<p>
+                `
+                <p>
                     <strong>Recipient:</strong>
                     ${recipient}
-                </p>`
+                </p>
+                `
                 :
                 ""
             }
@@ -488,24 +757,52 @@ function generateReceipt(
     `;
 
 
-    receiptContent.innerHTML = receiptHTML;
+    receiptContent.innerHTML =
+        receiptHTML;
 
-    receiptSection.style.display = "block";
+
+    receiptSection.style.display =
+        "block";
 }
 
 
-// ================================
+// ================================================
 // PRINT / SAVE RECEIPT
-// ================================
+// ================================================
 
 function printReceipt() {
 
+    let receiptElement =
+        document.getElementById(
+            "receiptContent"
+        );
+
+
+    if (!receiptElement) {
+        return;
+    }
+
+
     let receipt =
-        document.getElementById("receiptContent").innerHTML;
+        receiptElement.innerHTML;
 
 
     let printWindow =
-        window.open("", "", "width=700,height=800");
+        window.open(
+            "",
+            "",
+            "width=700,height=800"
+        );
+
+
+    if (!printWindow) {
+
+        alert(
+            "Please allow pop-ups to print the receipt."
+        );
+
+        return;
+    }
 
 
     printWindow.document.write(`
@@ -573,38 +870,109 @@ function printReceipt() {
 
     printWindow.print();
 }
-// ================================
+
+
+// ================================================
 // CREATE ACCOUNT
-// ================================
+// ================================================
 
 function createAccount() {
 
     let name =
-        document.getElementById("fullName").value.trim();
+        document.getElementById(
+            "fullName"
+        ).value.trim();
+
 
     let mobile =
-        document.getElementById("mobile").value.trim();
+        document.getElementById(
+            "mobile"
+        ).value.trim();
+
 
     let email =
-        document.getElementById("email").value.trim();
+        document.getElementById(
+            "email"
+        ).value.trim();
+
 
     let accountType =
-        document.getElementById("accountType").value;
+        document.getElementById(
+            "accountType"
+        ).value;
+
 
     let initialDeposit =
-        Number(document.getElementById("initialDeposit").value);
+        Number(
+            document.getElementById(
+                "initialDeposit"
+            ).value
+        );
+
 
     let pin =
-        document.getElementById("newPin").value;
+        document.getElementById(
+            "newPin"
+        ).value;
+
 
     let confirmPin =
-        document.getElementById("confirmPin").value;
+        document.getElementById(
+            "confirmPin"
+        ).value;
+
+
+    let newAccountNumberElement =
+        document.getElementById(
+            "newAccountNumber"
+        );
+
 
     let message =
-        document.getElementById("createMessage");
+        document.getElementById(
+            "createMessage"
+        );
 
 
-    // Check name
+    // ============================================
+    // VALIDATION
+    // ============================================
+
+
+    if (!newAccountNumberElement) {
+
+        message.innerText =
+            "Account number field is missing.";
+
+        return;
+    }
+
+
+    let newAccountNumber =
+        newAccountNumberElement.value.trim();
+
+
+    // Account number
+    if (!/^[0-9]{14}$/.test(newAccountNumber)) {
+
+        message.innerText =
+            "Account number must contain exactly 14 digits.";
+
+        return;
+    }
+
+
+    // Prevent using permanent demo account
+    if (newAccountNumber === DEMO_ACCOUNT) {
+
+        message.innerText =
+            "This account number is reserved for the demo account. Please use another 14-digit number.";
+
+        return;
+    }
+
+
+    // Name
     if (name === "") {
 
         message.innerText =
@@ -614,7 +982,7 @@ function createAccount() {
     }
 
 
-    // Check mobile number
+    // Mobile
     if (!/^[0-9]{10}$/.test(mobile)) {
 
         message.innerText =
@@ -624,7 +992,7 @@ function createAccount() {
     }
 
 
-    // Check email
+    // Email
     if (email === "") {
 
         message.innerText =
@@ -634,8 +1002,11 @@ function createAccount() {
     }
 
 
-    // Check initial deposit
-    if (initialDeposit < 0 || isNaN(initialDeposit)) {
+    // Initial deposit
+    if (
+        initialDeposit < 0 ||
+        isNaN(initialDeposit)
+    ) {
 
         message.innerText =
             "Please enter a valid initial deposit.";
@@ -644,7 +1015,7 @@ function createAccount() {
     }
 
 
-    // Check PIN
+    // PIN
     if (!/^[0-9]{4}$/.test(pin)) {
 
         message.innerText =
@@ -654,7 +1025,7 @@ function createAccount() {
     }
 
 
-    // Check confirm PIN
+    // Confirm PIN
     if (pin !== confirmPin) {
 
         message.innerText =
@@ -664,52 +1035,45 @@ function createAccount() {
     }
 
 
-    // Generate 14-digit account number
-    // Get account number entered by user
-let newAccountNumber =
-    document.getElementById("newAccountNumber").value.trim();
+    // ============================================
+    // SAVE ACCOUNT
+    // ============================================
 
-
-// Check account number
-if (!/^[0-9]{14}$/.test(newAccountNumber)) {
-
-    message.innerText =
-        "Account number must contain exactly 14 digits.";
-
-    return;
-}
-
-
-    // Save account details
     localStorage.setItem(
         "accountNumber",
         newAccountNumber
     );
+
 
     localStorage.setItem(
         "accountName",
         name
     );
 
+
     localStorage.setItem(
         "accountMobile",
         mobile
     );
+
 
     localStorage.setItem(
         "accountEmail",
         email
     );
 
+
     localStorage.setItem(
         "accountType",
         accountType
     );
 
+
     localStorage.setItem(
         "accountPin",
         pin
     );
+
 
     localStorage.setItem(
         "accountBalance",
@@ -717,30 +1081,71 @@ if (!/^[0-9]{14}$/.test(newAccountNumber)) {
     );
 
 
-    // Update current account
-    accountNumber = newAccountNumber;
-
-    balance = initialDeposit;
-
-
-    // Show success message
-    message.innerHTML =
-
-        "Account created successfully! 🎉<br><br>" +
-
-        "<strong>Your 14-digit Account Number:</strong><br>" +
-
-        "<span style='font-size:22px; color:#1769aa;'>" +
-
-        newAccountNumber +
-
-        "</span><br><br>" +
-
-        "Please remember your account number and PIN.";
+    // Set current account
+    accountNumber =
+        newAccountNumber;
 
 
-    // Disable create button
-    document.querySelector(
-        ".login-container button"
-    ).disabled = true;
+    balance =
+        initialDeposit;
+
+
+    // ============================================
+    // SUCCESS MESSAGE
+    // ============================================
+
+    message.innerHTML = `
+
+        <strong>
+            Account created successfully! 🎉
+        </strong>
+
+        <br><br>
+
+        <strong>
+            Your Account Number:
+        </strong>
+
+        <br>
+
+        <span
+            style="
+                font-size:22px;
+                color:#1769aa;
+                font-weight:bold;
+            "
+        >
+            ${newAccountNumber}
+        </span>
+
+        <br><br>
+
+        Please remember your account number and PIN.
+
+        <br><br>
+
+        <a href="login.html">
+            Go to Login
+        </a>
+
+    `;
+
+
+    // Don't generate another account number
 }
+
+
+// ================================================
+// INITIALIZE DASHBOARD
+// ================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        loadAccount();
+
+        updateBalance();
+
+    }
+);
