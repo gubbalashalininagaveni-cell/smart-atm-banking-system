@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Create Account - Smart ATM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="login-page">
+
+    <div class="login-container">
+
+        <div class="login-icon">
+            🏦
+        </div>
+
+        <h1>Create Account</h1>
+
+        <p>Open your demo Smart ATM account</p>
+
+        <label>Full Name</label>
+
+        <input
+            type="text"
+            id="fullName"
+            placeholder="Enter your full name"
+        >
+
+        <label>Mobile Number</label>
+
+        <input
+            type="tel"
+            id="mobile"
+            placeholder="Enter 10-digit mobile number"
+            maxlength="10"
+        >
+
+        <label>Email Address</label>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+        >
+
+        <label>Account Type</label>
+
+        <select id="accountType">
+            <option value="Savings">Savings Account</option>
+            <option value="Current">Current Account</option>
+        </select>
+
+        <label>Initial Deposit</label>
+
+        <input
+            type="number"
+            id="initialDeposit"
+            placeholder="Enter initial deposit"
+        >
+
+        <label>Create PIN</label>
+
+        <input
+            type="password"
+            id="newPin"
+            placeholder="Create 4-digit PIN"
+            maxlength="4"
+        >
+
+        <label>Confirm PIN</label>
+
+        <input
+            type="password"
+            id="confirmPin"
+            placeholder="Confirm 4-digit PIN"
+            maxlength="4"
+        >
+
+        <button onclick="createAccount()">
+            Create Account
+        </button>
+
+        <p id="createMessage"></p>
+
+        <p class="create-account-text">
+            Already have an account?
+            <a href="login.html">Login here</a>
+        </p>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
