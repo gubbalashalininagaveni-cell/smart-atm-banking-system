@@ -665,12 +665,19 @@ function createAccount() {
 
 
     // Generate 14-digit account number
-    let newAccountNumber =
-        "1000" +
-        Math.floor(
-            1000000000 +
-            Math.random() * 9000000000
-        ).toString();
+    // Get account number entered by user
+let newAccountNumber =
+    document.getElementById("newAccountNumber").value.trim();
+
+
+// Check account number
+if (!/^[0-9]{14}$/.test(newAccountNumber)) {
+
+    message.innerText =
+        "Account number must contain exactly 14 digits.";
+
+    return;
+}
 
 
     // Save account details
